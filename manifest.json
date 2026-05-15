@@ -2,7 +2,7 @@
   "name": "Daily PT Checklist",
   "short_name": "PT Checklist",
   "description": "Daily physical therapy exercise tracker",
-  "start_url": "/pt-checklist/",
+  "start_url": "/PT-checklist/",
   "display": "standalone",
   "background_color": "#1a2332",
   "theme_color": "#1a2332",
