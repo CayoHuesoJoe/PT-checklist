@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily PT Checklist</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1a2332">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PT Checklist">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f0f4f8;
+    color: #1a2332;
+    min-height: 100vh;
+    padding-bottom: 100px;
+  }
+
+  header {
+    background: #1a2332;
+    color: white;
+    padding: 18px 20px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  }
+
+  header h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    margin-bottom: 10px;
+  }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: #34d399;
+    border-radius: 99px;
+    transition: width 0.35s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #a7f3d0;
+    min-width: 42px;
+    text-align: right;
+  }
+
+  .section {
+    margin: 16px 14px 0;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+  }
+
+  .section-header {
+    background: #1a2332;
+    color: white;
+    padding: 10px 16px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-header .sec-count {
+    margin-left: auto;
+    font-size: 0.72rem;
+    background: rgba(255,255,255,0.15);
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 600;
+  }
+
+  .section-sub {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    margin-left: 4px;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.15s;
+    gap: 14px;
+  }
+
+  .item:last-child { border-bottom: none; }
+  .item:active { background: #f8fafc; }
+  .item.checked { background: #f0fdf4; }
+
+  .checkbox {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2.5px solid #cbd5e1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    background: white;
+  }
+
+  .item.checked .checkbox {
+    background: #22c55e;
+    border-color: #22c55e;
+  }
+
+  .checkmark {
+    display: none;
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .item.checked .checkmark { display: block; }
+
+  .item-text {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.35;
+  }
+
+  .item.checked .item-text {
+    color: #86efac;
+    text-decoration: line-through;
+    text-decoration-color: #86efac;
+  }
+
+  .item-note {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+
+  .item.checked .item-note { color: #bbf7d0; }
+
+  .reset-wrap {
+    padding: 24px 14px 30px;
+    text-align: center;
+  }
+
+  .reset-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    box-shadow: 0 2px 8px rgba(239,68,68,0.3);
+    transition: opacity 0.15s, transform 0.1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .reset-btn:active { opacity: 0.85; transform: scale(0.97); }
+
+  .complete-banner {
+    display: none;
+    margin: 16px 14px 0;
+    background: #22c55e;
+    color: white;
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.02em;
+    box-shadow: 0 2px 12px rgba(34,197,94,0.35);
+    animation: pop 0.3s ease;
+  }
+
+  @keyframes pop {
+    0% { transform: scale(0.95); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🏋️ Daily PT Checklist</h1>
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 0</div>
+  </div>
+</header>
+
+<div class="complete-banner" id="completeBanner">🎉 All done! Great work today.</div>
+
+<!-- SHOWER SECTION -->
+<div class="section">
+  <div class="section-header">
+    🚿 Shower
+    <span class="section-sub">2 × 10</span>
+    <span class="sec-count" id="sec-shower">0/3</span>
+  </div>
+  <div class="item" data-section="shower" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Calf &amp; toe raises</div>
+  </div>
+  <div class="item" data-section="shower" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Mini squats</div>
+  </div>
+  <div class="item" data-section="shower" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Marching</div>
+  </div>
+</div>
+
+<!-- STRENGTH SECTION -->
+<div class="section">
+  <div class="section-header">
+    💪 Strength
+    <span class="section-sub">2 × 10</span>
+    <span class="sec-count" id="sec-strength">0/4</span>
+  </div>
+  <div class="item" data-section="strength" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Step ups
+      <div class="item-note">10 L / 10 R</div>
+    </div>
+  </div>
+  <div class="item" data-section="strength" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Sit-stands (fast)
+      <div class="item-note">2 × 14 each</div>
+    </div>
+  </div>
+  <div class="item" data-section="strength" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Planks
+      <div class="item-note">Goal ~1 min</div>
+    </div>
+  </div>
+  <div class="item" data-section="strength" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Push-ups (knees)</div>
+  </div>
+</div>
+
+<!-- WALKING SECTION -->
+<div class="section">
+  <div class="section-header">
+    🚶 Walking
+    <span class="sec-count" id="sec-walking">0/2</span>
+  </div>
+  <div class="item" data-section="walking" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Walk 1 – distance &amp; quality
+      <div class="item-note">10 min</div>
+    </div>
+  </div>
+  <div class="item" data-section="walking" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Walk 2 – after dinner
+      <div class="item-note">15 min</div>
+    </div>
+  </div>
+</div>
+
+<!-- BALANCE SECTION -->
+<div class="section">
+  <div class="section-header">
+    ⚖️ Balance
+    <span class="section-sub">3 rounds each</span>
+    <span class="sec-count" id="sec-balance">0/6</span>
+  </div>
+  <div class="item" data-section="balance" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Half kneeling hold
+      <div class="item-note">2 × 1 min each side</div>
+    </div>
+  </div>
+  <div class="item" data-section="balance" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Bird dogs (legs only)
+      <div class="item-note">2 × 10 each</div>
+    </div>
+  </div>
+  <div class="item" data-section="balance" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Tall kneeling walks back/forward</div>
+  </div>
+  <div class="item" data-section="balance" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Semi-tandem or heel-toe stance</div>
+  </div>
+  <div class="item" data-section="balance" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Single leg stand
+      <div class="item-note">30 sec each leg</div>
+    </div>
+  </div>
+  <div class="item" data-section="balance" onclick="toggle(this)">
+    <div class="checkbox"><span class="checkmark">✓</span></div>
+    <div class="item-text">Heel-toe walk</div>
+  </div>
+</div>
+
+<div class="reset-wrap">
+  <button class="reset-btn" onclick="resetAll()">↺ Reset All</button>
+</div>
+
+<script>
+  const STORAGE_KEY = 'pt_checklist_state';
+
+  const sectionMap = {
+    shower: 3,
+    strength: 4,
+    walking: 2,
+    balance: 6
+  };
+
+  function getAllItems() {
+    return document.querySelectorAll('.item');
+  }
+
+  function saveState() {
+    const state = {};
+    getAllItems().forEach((el, i) => {
+      state[i] = el.classList.contains('checked');
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function loadState() {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (!saved) return;
+      const state = JSON.parse(saved);
+      getAllItems().forEach((el, i) => {
+        if (state[i]) el.classList.add('checked');
+      });
+    } catch(e) {}
+  }
+
+  function updateProgress() {
+    const all = getAllItems();
+    const total = all.length;
+    const done = document.querySelectorAll('.item.checked').length;
+
+    document.getElementById('progressFill').style.width = (done / total * 100) + '%';
+    document.getElementById('progressLabel').textContent = done + ' / ' + total;
+
+    Object.keys(sectionMap).forEach(sec => {
+      const items = document.querySelectorAll(`.item[data-section="${sec}"]`);
+      const checked = document.querySelectorAll(`.item[data-section="${sec}"].checked`).length;
+      document.getElementById('sec-' + sec).textContent = checked + '/' + items.length;
+    });
+
+    const banner = document.getElementById('completeBanner');
+    banner.style.display = (done === total) ? 'block' : 'none';
+  }
+
+  function toggle(el) {
+    el.classList.toggle('checked');
+    updateProgress();
+    saveState();
+  }
+
+  function resetAll() {
+    document.querySelectorAll('.item.checked').forEach(el => el.classList.remove('checked'));
+    updateProgress();
+    saveState();
+  }
+
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+
+  // Init
+  loadState();
+  updateProgress();
+</script>
+</body>
+</html>
