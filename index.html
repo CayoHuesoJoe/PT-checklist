@@ -18,22 +18,30 @@
   .section-header { background: #1a2332; color: white; padding: 10px 16px; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
   .section-header .sec-count { margin-left: auto; font-size: 0.72rem; background: rgba(255,255,255,0.15); padding: 2px 8px; border-radius: 99px; font-weight: 600; }
   .section-sub { font-size: 0.7rem; color: #94a3b8; font-weight: 500; letter-spacing: 0.04em; text-transform: none; margin-left: 4px; }
-  .item { display: flex; align-items: center; padding: 13px 16px; border-bottom: 1px solid #f1f5f9; user-select: none; -webkit-tap-highlight-color: transparent; gap: 12px; }
+  .item { display: flex; align-items: flex-start; padding: 13px 16px; border-bottom: 1px solid #f1f5f9; user-select: none; -webkit-tap-highlight-color: transparent; gap: 12px; }
   .item:last-child { border-bottom: none; }
   .item.done { background: #f0fdf4; }
-  .check-circle { width: 24px; height: 24px; border-radius: 50%; border: 2.5px solid #cbd5e1; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; background: white; cursor: pointer; }
-  .item.done .check-circle { background: #22c55e; border-color: #22c55e; color: white; font-size: 13px; font-weight: 800; }
-  .check-circle::after { content: ''; }
+  .item.skipped { background: #f8fafc; opacity: 0.45; }
+  .check-circle { width: 24px; height: 24px; border-radius: 50%; border: 2.5px solid #cbd5e1; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; background: white; margin-top: 1px; }
+  .item.done .check-circle { background: #22c55e; border-color: #22c55e; }
   .item.done .check-circle::after { content: '✓'; color: white; font-size: 13px; font-weight: 800; }
   .item-body { flex: 1; min-width: 0; }
-  .item-name { font-size: 0.93rem; line-height: 1.3; transition: color 0.2s; }
+  .item-name { font-size: 0.93rem; line-height: 1.3; }
   .item.done .item-name { color: #86efac; text-decoration: line-through; text-decoration-color: #86efac; }
-  .item-note { font-size: 0.72rem; color: #94a3b8; margin-top: 2px; }
+  .item.skipped .item-name { color: #94a3b8; }
+  .item-note { font-size: 0.72rem; color: #94a3b8; margin-top: 3px; line-height: 1.4; }
   .item.done .item-note { color: #bbf7d0; }
-  .dots { display: flex; gap: 5px; flex-shrink: 0; align-items: center; }
+  .item-cue { font-size: 0.7rem; color: #b0b8c4; margin-top: 3px; font-style: italic; line-height: 1.35; }
+  .dots { display: flex; gap: 5px; flex-shrink: 0; align-items: center; padding-top: 3px; }
   .dot { width: 12px; height: 12px; border-radius: 50%; border: 2px solid #34d399; background: transparent; cursor: pointer; transition: background 0.15s, transform 0.1s; flex-shrink: 0; }
   .dot.filled { background: #34d399; }
   .dot:active { transform: scale(0.85); }
+  .swap-pair { border-bottom: 1px solid #f1f5f9; }
+  .swap-pair:last-child { border-bottom: none; }
+  .swap-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: #94a3b8; padding: 6px 16px 0; }
+  .swap-pair .item { border-bottom: none; padding-top: 8px; padding-bottom: 8px; }
+  .swap-pair .item:first-of-type { padding-top: 4px; }
+  .swap-pair .item.skipped .dot { border-color: #cbd5e1; }
   .reset-wrap { padding: 24px 14px 30px; text-align: center; }
   .reset-btn { background: #ef4444; color: white; border: none; padding: 14px 40px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; letter-spacing: 0.03em; box-shadow: 0 2px 8px rgba(239,68,68,0.3); transition: opacity 0.15s, transform 0.1s; -webkit-tap-highlight-color: transparent; }
   .reset-btn:active { opacity: 0.85; transform: scale(0.97); }
@@ -66,89 +74,122 @@
     <div class="item-body"><div class="item-name">Marching – Tight Butt</div></div>
     <div class="dots"></div>
   </div>
-  <div class="item" data-section="shower" data-dots="2" data-key="shower-2">
+</div>
+
+<!-- PT-A -->
+<div class="section">
+  <div class="section-header">💪 PT-A — Core &amp; Neuro Control <span class="section-sub">20–25 min · RPE ~5–6</span><span class="sec-count" id="sec-pta"></span></div>
+
+  <div class="item" data-section="pta" data-dots="3" data-key="pta-0">
     <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Heel-Toe Stance</div></div>
+    <div class="item-body">
+      <div class="item-name">Bird Dogs</div>
+      <div class="item-note">2–3 × 10/side</div>
+      <div class="item-cue">Slow. Reach long rather than high. Don't let pelvis rotate.</div>
+    </div>
+    <div class="dots"></div>
+  </div>
+
+  <!-- SWAP PAIR: Pallof / Wood Chops -->
+  <div class="swap-pair">
+    <div class="swap-label">Tap whichever you did today</div>
+    <div class="item swap-item" data-section="pta" data-dots="3" data-key="pta-1a" data-swap="pta-swap">
+      <div class="check-circle"></div>
+      <div class="item-body">
+        <div class="item-name">Pallof Press</div>
+        <div class="item-note">2–3 × 10–12/side</div>
+        <div class="item-cue">1–2 sec pause fully extended.</div>
+      </div>
+      <div class="dots"></div>
+    </div>
+    <div class="item swap-item" data-section="pta" data-dots="3" data-key="pta-1b" data-swap="pta-swap">
+      <div class="check-circle"></div>
+      <div class="item-body">
+        <div class="item-name">Wood Chops</div>
+        <div class="item-note">2–3 × 12/side</div>
+        <div class="item-cue">Every other PT-A session.</div>
+      </div>
+      <div class="dots"></div>
+    </div>
+  </div>
+
+  <div class="item" data-section="pta" data-dots="3" data-key="pta-2">
+    <div class="check-circle"></div>
+    <div class="item-body">
+      <div class="item-name">Side Plank</div>
+      <div class="item-note">2 × 30–45 sec/side</div>
+      <div class="item-cue">Goal: progress to 60 sec.</div>
+    </div>
+    <div class="dots"></div>
+  </div>
+
+  <div class="item" data-section="pta" data-dots="3" data-key="pta-3">
+    <div class="check-circle"></div>
+    <div class="item-body">
+      <div class="item-name">Single-Leg Glute Bridge</div>
+      <div class="item-note">2–3 × 10–12/side</div>
+      <div class="item-cue">Pause at the top.</div>
+    </div>
+    <div class="dots"></div>
+  </div>
+
+  <div class="item" data-section="pta" data-dots="3" data-key="pta-4">
+    <div class="check-circle"></div>
+    <div class="item-body">
+      <div class="item-name">Forward Step Taps</div>
+      <div class="item-note">2–3 × 6–10/side</div>
+      <div class="item-cue">Control and balance &gt; speed.</div>
+    </div>
     <div class="dots"></div>
   </div>
 </div>
 
-<!-- BALANCE-EAR -->
+<!-- PT-B -->
 <div class="section">
-  <div class="section-header">👂 Balance-Ear <span class="section-sub">4 sessions × 1 min</span><span class="sec-count" id="sec-balance"></span></div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-0">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">VOR 1 – Standing/Busy · L-R</div><div class="item-note">1 min</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-1">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">VOR 1 – Standing/Busy · Up-Down</div><div class="item-note">1 min</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-2">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">VOR 1 during gait</div><div class="item-note">1 min</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-3">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Sit-to-stand with fixed gaze</div><div class="item-note">1 min</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-4">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">VOR 2 – eyes-thumb opposite</div><div class="item-note">1 min</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-5">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Single leg stand</div><div class="item-note">30 sec each leg</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="balance" data-dots="4" data-key="balance-6">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Heel-toe walk</div></div>
-    <div class="dots"></div>
-  </div>
-</div>
+  <div class="section-header">🏃 PT-B — Posterior &amp; Dynamic Control <span class="section-sub">20–25 min · RPE ~6</span><span class="sec-count" id="sec-ptb"></span></div>
 
-<!-- STRENGTH -->
-<div class="section">
-  <div class="section-header">💪 Strength <span class="section-sub">2 sets × 10</span><span class="sec-count" id="sec-strength"></span></div>
-  <div class="item" data-section="strength" data-dots="2" data-key="strength-0">
+  <div class="item" data-section="ptb" data-dots="3" data-key="ptb-0">
     <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Step ups</div><div class="item-note">10 L / 10 R</div></div>
+    <div class="item-body">
+      <div class="item-name">Superman with W</div>
+      <div class="item-note">2 × 12–15</div>
+    </div>
     <div class="dots"></div>
   </div>
-  <div class="item" data-section="strength" data-dots="2" data-key="strength-1">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Planks</div><div class="item-note">Goal ~1 min</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="strength" data-dots="2" data-key="strength-2">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Hip raises</div></div>
-    <div class="dots"></div>
-  </div>
-  <div class="item" data-section="strength" data-dots="2" data-key="strength-3">
-    <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Bent-knee hip flexion</div></div>
-    <div class="dots"></div>
-  </div>
-</div>
 
-<!-- WALKING -->
-<div class="section">
-  <div class="section-header">🚶 Walking<span class="sec-count" id="sec-walking"></span></div>
-  <div class="item" data-section="walking" data-dots="1" data-key="walking-0">
+  <div class="item" data-section="ptb" data-dots="3" data-key="ptb-1">
     <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Walk 1 – distance &amp; quality</div><div class="item-note">10 min</div></div>
+    <div class="item-body">
+      <div class="item-name">KB Swing</div>
+      <div class="item-note">3 × 8–10</div>
+    </div>
     <div class="dots"></div>
   </div>
-  <div class="item" data-section="walking" data-dots="1" data-key="walking-1">
+
+  <div class="item" data-section="ptb" data-dots="3" data-key="ptb-2">
     <div class="check-circle"></div>
-    <div class="item-body"><div class="item-name">Walk 2 – after dinner</div><div class="item-note">15 min · uneven surfaces</div></div>
+    <div class="item-body">
+      <div class="item-name">Lateral Lunge</div>
+      <div class="item-note">2 × 8/side</div>
+    </div>
+    <div class="dots"></div>
+  </div>
+
+  <div class="item" data-section="ptb" data-dots="3" data-key="ptb-3">
+    <div class="check-circle"></div>
+    <div class="item-body">
+      <div class="item-name">Rebounding Calf Raise</div>
+      <div class="item-note">2–3 × 30 sec</div>
+    </div>
+    <div class="dots"></div>
+  </div>
+
+  <div class="item" data-section="ptb" data-dots="3" data-key="ptb-4">
+    <div class="check-circle"></div>
+    <div class="item-body">
+      <div class="item-name">Light RDL <span style="font-size:0.72rem;color:#94a3b8;font-weight:400;">(optional)</span></div>
+      <div class="item-note">2 × 8</div>
+    </div>
     <div class="dots"></div>
   </div>
 </div>
@@ -158,12 +199,10 @@
 </div>
 
 <script>
-  const STORAGE_KEY = 'pt_state_v1';
-  const DATE_KEY = 'pt_date_v1';
+  const STORAGE_KEY = 'pt_state_v2';
+  const DATE_KEY = 'pt_date_v2';
 
-  function todayStr() {
-    return new Date().toLocaleDateString('en-US');
-  }
+  function todayStr() { return new Date().toLocaleDateString('en-US'); }
 
   function loadState() {
     const saved = localStorage.getItem(DATE_KEY);
@@ -180,7 +219,8 @@
     document.querySelectorAll('.item').forEach(item => {
       const key = item.dataset.key;
       const filled = item.querySelectorAll('.dot.filled').length;
-      state[key] = filled;
+      const skipped = item.classList.contains('skipped') ? 1 : 0;
+      state[key] = { filled, skipped };
     });
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     localStorage.setItem(DATE_KEY, todayStr());
@@ -192,59 +232,75 @@
     for (let i = 0; i < count; i++) {
       const dot = document.createElement('div');
       dot.className = 'dot' + (i < filled ? ' filled' : '');
-      dot.addEventListener('click', (e) => {
-        e.stopPropagation();
-        tapDot(item, i);
-      });
+      dot.addEventListener('click', (e) => { e.stopPropagation(); tapDot(item, i); });
       container.appendChild(dot);
     }
     updateItemDone(item);
   }
 
   function tapDot(item, idx) {
+    if (item.classList.contains('skipped')) return;
     const dots = item.querySelectorAll('.dot');
-    const total = dots.length;
     const currentFilled = item.querySelectorAll('.dot.filled').length;
-    let newFilled;
-    if (idx === currentFilled - 1 && currentFilled === idx + 1) {
-      newFilled = currentFilled - 1;
-    } else {
-      newFilled = idx + 1;
+    let newFilled = (idx === currentFilled - 1) ? currentFilled - 1 : idx + 1;
+    dots.forEach((d, i) => d.classList.toggle('filled', i < newFilled));
+
+    const swapGroup = item.dataset.swap;
+    if (swapGroup && newFilled > 0) {
+      document.querySelectorAll(`.swap-item[data-swap="${swapGroup}"]`).forEach(other => {
+        if (other !== item) {
+          other.classList.add('skipped');
+          other.querySelectorAll('.dot').forEach(d => d.classList.remove('filled'));
+          updateItemDone(other);
+        }
+      });
     }
-    dots.forEach((d, i) => {
-      d.classList.toggle('filled', i < newFilled);
-    });
+    if (swapGroup && newFilled === 0) {
+      const anyFilled = Array.from(document.querySelectorAll(`.swap-item[data-swap="${swapGroup}"]`))
+        .some(el => el.querySelectorAll('.dot.filled').length > 0);
+      if (!anyFilled) {
+        document.querySelectorAll(`.swap-item[data-swap="${swapGroup}"]`).forEach(other => {
+          other.classList.remove('skipped');
+        });
+      }
+    }
+
     updateItemDone(item);
     updateProgress();
     saveState();
   }
 
   function updateItemDone(item) {
+    if (item.classList.contains('skipped')) { item.classList.remove('done'); return; }
     const total = item.querySelectorAll('.dot').length;
     const filled = item.querySelectorAll('.dot.filled').length;
     item.classList.toggle('done', filled >= total);
   }
 
   function updateProgress() {
-    const allItems = document.querySelectorAll('.item');
+    const allItems = document.querySelectorAll('.item:not(.skipped)');
     const total = allItems.length;
     const done = document.querySelectorAll('.item.done').length;
-    document.getElementById('progressFill').style.width = (done / total * 100) + '%';
+    document.getElementById('progressFill').style.width = (total ? done / total * 100 : 0) + '%';
     document.getElementById('progressLabel').textContent = done + ' / ' + total;
 
-    ['shower','balance','strength','walking'].forEach(sec => {
-      const items = document.querySelectorAll(`.item[data-section="${sec}"]`);
+    ['shower','pta','ptb'].forEach(sec => {
+      const el = document.getElementById('sec-' + sec);
+      if (!el) return;
+      const items = document.querySelectorAll(`.item[data-section="${sec}"]:not(.skipped)`);
       const secDone = document.querySelectorAll(`.item[data-section="${sec}"].done`).length;
-      document.getElementById('sec-' + sec).textContent = secDone + '/' + items.length;
+      el.textContent = secDone + '/' + items.length;
     });
 
-    document.getElementById('completeBanner').style.display = (done === total) ? 'block' : 'none';
+    const allDone = document.querySelectorAll('.item.done').length;
+    const allCountable = document.querySelectorAll('.item:not(.skipped)').length;
+    document.getElementById('completeBanner').style.display = (allDone === allCountable && allCountable > 0) ? 'block' : 'none';
   }
 
   function resetAll() {
     document.querySelectorAll('.item').forEach(item => {
-      const count = parseInt(item.dataset.dots);
-      buildDots(item, count, 0);
+      item.classList.remove('skipped', 'done');
+      buildDots(item, parseInt(item.dataset.dots), 0);
     });
     updateProgress();
     saveState();
@@ -255,8 +311,9 @@
     document.querySelectorAll('.item').forEach(item => {
       const count = parseInt(item.dataset.dots);
       const key = item.dataset.key;
-      const filled = state[key] || 0;
-      buildDots(item, count, filled);
+      const saved = state[key] || {};
+      if (saved.skipped) item.classList.add('skipped');
+      buildDots(item, count, saved.filled || 0);
     });
     updateProgress();
   }
